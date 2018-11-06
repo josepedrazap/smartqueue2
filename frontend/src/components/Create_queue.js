@@ -45,7 +45,7 @@ class Create_queue extends Component {
       this.props.alert.error('Debes ingresar un nombre para la queue.')
     }else if(this.state.lat === 0 || this.state.long === 0){
       this.props.alert.error('Debes ingresar una posición geografica para la queue.')
-    }
+    }else{
     axios({
       method: 'post',
       url: '/run/queue/create_queue',
@@ -71,6 +71,7 @@ class Create_queue extends Component {
     .catch((error) => {
       this.setState({status: 500})
     });
+    }
   }
   handleClose(e){
     this.setState({
