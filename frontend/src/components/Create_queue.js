@@ -15,8 +15,8 @@ class Create_queue extends Component {
       address: '',
       description: '',
       queue_id: '',
-      lat: '',
-      lng: '',
+      lat: 0,
+      lng: 0,
       status: 0
     };
 
@@ -41,6 +41,11 @@ class Create_queue extends Component {
     })
   }
   handleSubmit(e){
+    if(this.state.title.length < 1){
+      this.props.alert.error('Debes ingresar un nombre para la queue.')
+    }else if(this.state.lat === 0 || this.state.long === 0){
+      this.props.alert.error('Debes ingresar una posición geografica para la queue.')
+    }
     axios({
       method: 'post',
       url: '/run/queue/create_queue',
