@@ -15,7 +15,7 @@ exports.node_list = function(req, res) {
 exports.count_nodes = function(req, res) {
     queue.count({id_queue: req.query.id}, function(err, count) {
       var data = ' ' + count;
-      res.status(200).send(data);
+      return res.status(200).send(data);
     });
 };
 
@@ -23,7 +23,7 @@ exports.queue_list = function(req, res) {
   queue_header.find({id_user: req.user})
     .exec(function (err, list_queue) {
       if (err) { return next(err); }
-      res.send(list_queue);
+      return res.send(list_queue);
     });
 };
 
@@ -31,7 +31,7 @@ exports.user_list = function(req, res) {
   queue.find({id_queue: req.params.id_queue})
     .exec(function (err, list_users) {
       if (err) { return next(err); }
-      res.send(list_users);
+      return res.send(list_users);
     });
 
 };
@@ -46,7 +46,7 @@ exports.enqueue = function(req, res) {
         .sort({arrive: 'desc'}) // give me the max
         .exec(function (err, last) {
           if (err) {
-            res.status(500).send();
+            return res.status(500).send();
 
           }else{
           let body = req.body;
@@ -79,7 +79,7 @@ exports.enqueue = function(req, res) {
             res.io.emit('ok', '$$$' + req.query.id);
             res.io.emit('ok', "qrc1" + req.query.id);
 
-            res.status(200).send();
+            return res.status(200).send();
           });
           }
         });
@@ -105,8 +105,8 @@ exports.dequeue = function(req, res) {
         .exec(function(err, top){
           if(!top){
             console.log('vacia');
-            res.status(200).send('vacia');
-            return;
+
+            return res.status(200).send('vacia');
           }else{
             console.log(top)
             id_top = top._id;
@@ -115,16 +115,16 @@ exports.dequeue = function(req, res) {
               queue.findOne({ id_next: id_top }, function (err, new_top) {
                 if(!new_top){
                 console.log('la cola se vacio');
-                res.status(200).send('vacia');
-                return;
+
+                return res.status(200).send('vacia');
                 }else{
                   new_top.top = true;
                   new_top.save();
                   res.io.emit(queue_.id_user, '$$$' + req.query.id);
                   //res.io.emit('ok', '$$$' + req.query.id);
                   res.io.emit('screen' + req.query.id, number);
-                  res.status(200).send('ok');
-                  return;
+
+                  return res.status(200).send('ok');
                 }
               })
             });
