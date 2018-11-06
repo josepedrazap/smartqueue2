@@ -115,7 +115,8 @@ exports.dequeue = function(req, res) {
               queue.findOne({ id_next: id_top }, function (err, new_top) {
                 if(!new_top){
                 console.log('la cola se vacio');
-
+                res.io.emit(queue_.id_user, '$$$' + req.query.id);
+                res.io.emit('screen' + req.query.id, number);
                 return res.status(200).send('vacia');
                 }else{
                   new_top.top = true;
