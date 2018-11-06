@@ -43,7 +43,7 @@ class Create_queue extends Component {
   handleSubmit(e){
     axios({
       method: 'post',
-      url: 'http://localhost:3001/run/queue/create_queue',
+      url: '/run/queue/create_queue',
       data: {
         lat: this.state.lat,
         long: this.state.lng,
