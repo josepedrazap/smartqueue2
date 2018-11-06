@@ -30,6 +30,9 @@ class Login extends Component {
       })
     }
     handleLogin(){
+      if(this.state.user === ''){
+        this.props.alert.error('Usuario o contraseña no válidos :(')
+      }else{
       axios({
         method: 'post',
         url: '/auth/exec',
@@ -39,7 +42,7 @@ class Login extends Component {
         }
       })
       .then((response) => {
-        
+
         window.sessionStorage.setItem("token", response.data.token);
         window.sessionStorage.setItem("user_id", response.data.user_id);
         window.sessionStorage.setItem("user", response.data.user);
@@ -54,6 +57,7 @@ class Login extends Component {
         this.props.alert.error('Usuario o contraseña no válidos :(')
 
       })
+    }
     }
     handleClose(e){
 

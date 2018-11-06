@@ -122,9 +122,7 @@ exports.dequeue = function(req, res) {
                   new_top.top = true;
                   new_top.save();
                   res.io.emit(queue_.id_user, '$$$' + req.query.id);
-                  //res.io.emit('ok', '$$$' + req.query.id);
                   res.io.emit('screen' + req.query.id, number);
-
                   return res.status(200).send('ok');
                 }
               })
