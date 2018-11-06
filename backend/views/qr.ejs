@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>qr</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:400,700">
+        <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/assets/css/animate.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <link rel="stylesheet" href="/assets/css/media-queries.css">
+
+
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/ico/apple-touch-icon-144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/ico/apple-touch-icon-114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/ico/apple-touch-icon-72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="/assets/ico/apple-touch-icon-57-precomposed.png">
+
+    </head>
+
+    <body>
+
+        <!-- Top content -->
+      <div class="top-content">
+        	<div class="container">
+
+      				<div class="row">
+      					<div class="col-sm-6 col-sm-offset-3 r-form-1-box wow fadeInUp">
+      						<div class="r-form-1-top">
+      							<div class="r-form-1-top-left">
+      								<h3 id="texto_1">Escanea el código tu aplicación SmartQueue o toca el lápiz para obtener tu número ;)</h3>
+
+      							</div>
+      							<div class="r-form-1-top-right " onclick="pencil()">
+      								<button class="btn btn-danger pencil"><i class="fa fa-pencil" ></i></button>
+      							</div>
+      						</div>
+      						<div class="r-form-1-bottom" id="qr">
+
+      						</div>
+      					</div>
+      				</div>
+
+            </div>
+            <audio class="hidden" id="audio" controls>
+              <source type="audio/wav" src="/audio/yes.mp3">
+            </audio>
+        </div>
+
+        <!-- Javascript -->
+        <script src="/javascripts/socket.io/socket.io.js"></script>
+        <script src="/javascripts/qr_render/jquery.min.js"></script>
+        <script src="/javascripts/qr_render/jquery-qrcode-0.14.0.min.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/assets/js/jquery.backstretch.min.js"></script>
+        <script src="/assets/js/wow.min.js"></script>
+        <script src="/assets/js/retina-1.1.0.min.js"></script>
+        <script src="/assets/js/scripts.js"></script>
+
+        <script type="text/javascript">
+          function print_(p){
+            var ventana = window.open('', 'PRINT', 'height=60,width=40');
+              ventana.document.write('<html><head><title>SmartQueue</title>');
+              ventana.document.write('</head>SmartQueue<body >');
+              ventana.document.write('Tu número de atención es: '+p+'');
+              ventana.document.write('</body></html>');
+              ventana.document.close();
+              ventana.print();
+              ventana.close();
+          }
+          function pencil(){
+            var id = '<%=q[0]._id%>';
+            axios({
+              url: '/run/queue/enqueue?id=' + id + '&pencil=1',
+              method: 'get'
+            })
+            .then((response => {
+              if(response.status === 200){
+              }
+            }))
+          }
+          function ini(){
+            $('#qr').qrcode({
+                // render method: 'canvas', 'image' or 'div'
+                render: 'canvas',
+
+                // version range somewhere in 1 .. 40
+                minVersion: 1,
+                maxVersion: 40,
+
+                // error correction level: 'L', 'M', 'Q' or 'H'
+                ecLevel: 'L',
+
+                // offset in pixel if drawn onto existing canvas
+                left: 0,
+                top: 0,
+
+                // size in pixel
+                size: 500,
+
+                // code color or image element
+                fill: '#fff',
+
+                // background color or image element, null for transparent background
+                background: null,
+
+                // content
+                text: '<%=q[0]._id%>',
+
+                // corner radius relative to module width: 0.0 .. 0.5
+                radius: 0.0,
+
+                // quiet zone in modules
+                quiet: 0,
+
+                // modes
+                // 0: normal
+                // 1: label strip
+                // 2: label box
+                // 3: image strip
+                // 4: image box
+                mode: 0,
+
+                mSize: 0.1,
+                mPosX: 0.5,
+                mPosY: 0.5,
+
+                label: '<%=q[0].alias_qr%>',
+                fontname: 'Sans-serif',
+                fontcolor: '#fff',
+
+                image: null
+            });
+          }
+
+          $(function (){
+            socket = io();
+            socket.on('qr<%=q[0]._id%>', function(msg){
+              if(msg === 'cancel'){
+                document.getElementById("qr").innerHTML="";
+                document.getElementById("texto_1").innerHTML="La queue ha sido cancelada por su administrador :(";
+                window.open('','_parent','');
+                window.close();
+                return;
+              }
+              if(msg[0] == '#' && msg[1] == 'p' && msg[2] == 'r'){
+                print_(msg.substring(3));
+              }
+              if(msg[0] == 'i' && msg[1] == 'd'){
+                document.getElementById("qr").innerHTML="";
+                var audio = document.getElementById("audio");
+                audio.play();
+                $('#qr').qrcode({
+                      // render method: 'canvas', 'image' or 'div'
+                      render: 'canvas',
+
+                      // version range somewhere in 1 .. 40
+                      minVersion: 1,
+                      maxVersion: 40,
+
+                      // error correction level: 'L', 'M', 'Q' or 'H'
+                      ecLevel: 'L',
+
+                      // offset in pixel if drawn onto existing canvas
+                      left: 0,
+                      top: 0,
+
+                      // size in pixel
+                      size: 500,
+
+                      // code color or image element
+                      fill: '#fff',
+
+                      // background color or image element, null for transparent background
+                      background: null,
+
+                      // content
+                      text: msg.substring(2),
+
+                      // corner radius relative to module width: 0.0 .. 0.5
+                      radius: 0.0,
+
+                      // quiet zone in modules
+                      quiet: 0,
+
+                      // modes
+                      // 0: normal
+                      // 1: label strip
+                      // 2: label box
+                      // 3: image strip
+                      // 4: image box
+                      mode: 0,
+
+                      mSize: 0.1,
+                      mPosX: 0.5,
+                      mPosY: 0.5,
+
+                      label:  '<%=q[0]._id%>',
+                      fontname: 'Sans-serif',
+                      fontcolor: '#fff',
+
+                      image: null
+                  });
+              }
+
+            });
+          });
+          socket = io();
+          socket.onmessage = function(event) {
+            var message = event.data;
+          };
+          window.onload = ini();
+        </script>
+        <style>
+
+        .pencil {
+          animation: btn_cq-spin infinite 1.2s linear;
+        }
+
+        @keyframes btn_cq-spin {
+          0%   {  box-shadow: 0 0 50px #088A08;}
+         50% {  box-shadow: 0 0 50px #fff;}
+         100% {  box-shadow: 0 0 40px #088A08;}
+        }
+
+        </style>
+    </body>
+
+</html>

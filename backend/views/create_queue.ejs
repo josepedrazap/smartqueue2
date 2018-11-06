@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <script src="/javascripts/qr_render/jquery.min.js"></script>
+    <script src="/javascripts/qr_render/jquery-qrcode-0.14.0.min.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1533195059" />
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <title>Crear queue</title>
+  </head>
+
+    <div class="header">
+      <a href="#default" class="logo">SmartQueue</a>
+      <div class="header-right">
+        <button type="button" class="btn btn-primary" name="button"><i class="fas fa-home"></i></button>
+        <button type="button" class="btn btn-outline-success" onclick="create_queue()" name="button"><i class="fas fa-plus-square"></i></button>
+        <button type="button" class="btn btn-warning" name="button"><i class="fas fa-map-marked-alt"></i></button>
+        <button type="button" class="btn btn-info"name="button"><i class="fas fa-info-circle"></i></button>
+      </div>
+    </div>
+
+  <body>
+    <div class="container .text-justify">
+      <div class="row">
+        <h2 class=".text-justify"><%=user%> vamos a crear una queue</h2>
+      </div>
+    </div>
+    <div class="col-md-15">
+      <form class="" action="/run/queue/create_queue" method="post">
+        <input hidden name="usr_id" value="<%=usr_id%>">
+        <input hidden name="user" value="<%=user%>">
+        <input hidden name="lat" id="lat">
+        <input hidden name="long" id="long">
+            <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label for="">Nombre de la queue</label>
+                <input class="form-control" type="text" name="name_queue" value="" required>
+              </div>
+            </div>
+            <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label for="">Alias del codigo qr</label>
+                <input id="alias" class="form-control" onkeyup="qr_prueba()" type="text" name="alias_qr_queue" value="" required>
+              </div>
+            </div>
+            <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12">
+              <label for="">Dirección geográfica</label>
+              <div class="input-group mb-3">
+                <input id="dir" class="form-control" type="text" name="direccion_queue" value="" required>
+                <div class="input-group-append">
+                  <button class="btn btn-dark" onclick="run_maps()" type="button" id="button-addon2">Buscar</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-8 col-md-4 col-sm-12 col-xs-12">
+              <div class="form-group">
+                <label for="">Descripción</label>
+                <textarea class="form-control" type="text" col="6" name="description_queue" value="" required></textarea>
+              </div>
+              <button class="btn btn-success" type="submit" name="button">Crear</button>
+            </div>
+      </form>
+     </div>
+
+    <div class="col-md-15" id="map" style="width: 450px; height: 450px; border-style: solid;">
+
+    </div>
+
+  </body>
+</html>
+<script>
+  function qr_prueba(){
+    document.getElementById("qr").innerHTML="";
+    var alias = document.getElementById("alias").value;
+    console.log(alias);
+    $('#qr').qrcode({
+        // render method: 'canvas', 'image' or 'div'
+        render: 'canvas',
+
+        // version range somewhere in 1 .. 40
+        minVersion: 1,
+        maxVersion: 40,
+
+        // error correction level: 'L', 'M', 'Q' or 'H'
+        ecLevel: 'L',
+
+        // offset in pixel if drawn onto existing canvas
+        left: 0,
+        top: 0,
+
+        // size in pixel
+        size: 500,
+
+        // code color or image element
+        fill: '#000',
+
+        // background color or image element, null for transparent background
+        background: null,
+
+        // content
+        text: 'Esto es un codigo de prueba que no te llevara a ninguna parte :)',
+
+        // corner radius relative to module width: 0.0 .. 0.5
+        radius: 0.0,
+
+        // quiet zone in modules
+        quiet: 0,
+
+        // modes
+        // 0: normal
+        // 1: label strip
+        // 2: label box
+        // 3: image strip
+        // 4: image box
+        mode: 1,
+
+        mSize: 0.1,
+        mPosX: 0.5,
+        mPosY: 0.5,
+
+        label: alias ,
+        fontname: 'Sans-serif',
+        fontcolor: '#000',
+
+        image: null
+    });
+  };
+</script>
+<script  type="text/javascript" charset="UTF-8" >
+
+      function geocode(platform) {
+          var dir = document.getElementById("dir").value;
+          console.log(" hola " + dir);
+          var geocoder = platform.getGeocodingService(),
+            geocodingParameters = {
+              searchText: dir,
+              jsonattributes : 1
+            };
+
+          geocoder.geocode(
+            geocodingParameters,
+            onSuccess,
+            onError
+          );
+      }
+      /**
+      * This function will be called once the Geocoder REST API provides a response
+      * @param  {Object} result          A JSONP object representing the  location(s) found.
+      *
+      * see: http://developer.here.com/rest-apis/documentation/geocoder/topics/resource-type-response-geocode.html
+      */
+      function onSuccess(result) {
+          var locations = result.response.view[0].result;
+          /*
+          * The styling of the geocoding response on the map is entirely under the developer's control.
+          * A representitive styling can be found the full JS + HTML code of this example
+          * in the functions below:
+          */
+          addLocationsToMap(locations);
+          //addLocationsToPanel(locations);
+          // ... etc.
+      }
+
+      /**
+      * This function will be called if a communication error occurs during the JSON-P request
+      * @param  {Object} error  The error message received.
+      */
+      function onError(error) {
+          alert('Ooops!');
+      }
+
+
+
+
+      /**
+      * Boilerplate map initialization code starts below:
+      */
+
+      //Step 1: initialize communication with the platform
+      var platform = new H.service.Platform({
+        app_id: '8RDY8onWpgmSZ6TdR7xU',
+        app_code: 'UXYcuwksLXzVmASNjk7XAg',
+        useHTTPS: true
+      });
+      var pixelRatio = window.devicePixelRatio || 1;
+      var defaultLayers = platform.createDefaultLayers({
+        tileSize: pixelRatio === 1 ? 256 : 512,
+        ppi: pixelRatio === 1 ? undefined : 320
+      });
+
+      //Step 2: initialize a map - this map is centered over California
+      var map = new H.Map(document.getElementById('map'),
+          defaultLayers.normal.map,{
+          center: {lat:-70.6503, lng:-33.43775},
+          zoom: 15,
+          pixelRatio: pixelRatio
+      });
+
+      //var locationsContainer = document.getElementById('panel');
+
+      //Step 3: make the map interactive
+      // MapEvents enables the event system
+      // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+      // Create the default UI components
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+      // Hold a reference to any infobubble opened
+      var bubble;
+      /**
+      * Opens/Closes a infobubble
+      * @param  {H.geo.Point} position     The location on the map.
+      * @param  {String} text              The contents of the infobubble.
+      */
+      function openBubble(position, text){
+          if(!bubble){
+            bubble =  new H.ui.InfoBubble(
+              position,
+              {content: text});
+            ui.addBubble(bubble);
+          } else {
+            bubble.setPosition(position);
+            bubble.setContent(text);
+            bubble.open();
+          }
+      }
+
+      /**
+      * Creates a series of list items for each location found, and adds it to the panel.
+      * @param {Object[]} locations An array of locations as received from the
+      *                             H.service.GeocodingService
+      */
+      function addLocationsToPanel(locations){
+
+          var nodeOL = document.createElement('ul'),
+            i;
+
+          nodeOL.style.fontSize = 'small';
+          nodeOL.style.marginLeft ='5%';
+          nodeOL.style.marginRight ='5%';
+
+
+           for (i = 0;  i < locations.length; i += 1) {
+             var li = document.createElement('li'),
+                divLabel = document.createElement('div'),
+                address = locations[i].location.address,
+                content =  '<strong style="font-size: large;">' + address.label  + '</strong></br>';
+                position = {
+                  lat: locations[i].location.displayPosition.latitude,
+                  lng: locations[i].location.displayPosition.longitude
+                };
+
+              content += '<strong>houseNumber:</strong> ' + address.houseNumber + '<br/>';
+              content += '<strong>street:</strong> '  + address.street + '<br/>';
+              content += '<strong>district:</strong> '  + address.district + '<br/>';
+              content += '<strong>city:</strong> ' + address.city + '<br/>';
+              content += '<strong>postalCode:</strong> ' + address.postalCode + '<br/>';
+              content += '<strong>county:</strong> ' + address.county + '<br/>';
+              content += '<strong>country:</strong> ' + address.country + '<br/>';
+              content += '<br/><strong>position:</strong> ' +
+                Math.abs(position.lat.toFixed(4)) + ((position.lat > 0) ? 'N' : 'S') +
+                ' ' + Math.abs(position.lng.toFixed(4)) + ((position.lng > 0) ? 'E' : 'W');
+
+              divLabel.innerHTML = content;
+              li.appendChild(divLabel);
+
+              nodeOL.appendChild(li);
+          }
+
+          locationsContainer.appendChild(nodeOL);
+      }
+
+
+      /**
+      * Creates a series of H.map.Markers for each location found, and adds it to the map.
+      * @param {Object[]} locations An array of locations as received from the
+      *                             H.service.GeocodingService
+      */
+      function addLocationsToMap(locations){
+        var group = new  H.map.Group(),
+          position,
+          i;
+
+        // Add a marker for each location found
+        for (i = 0;  i < locations.length; i += 1) {
+          position = {
+            lat: locations[i].location.displayPosition.latitude,
+            lng: locations[i].location.displayPosition.longitude
+          };
+          marker = new H.map.Marker(position);
+          marker.label = "bien brolicaaa";
+          group.addObject(marker);
+          document.getElementById("lat").value = locations[i].location.displayPosition.latitude;
+          document.getElementById("long").value = locations[i].location.displayPosition.longitude;
+
+        }
+
+        group.addEventListener('tap', function (evt) {
+          map.setCenter(evt.target.getPosition());
+          openBubble(
+             evt.target.getPosition(), evt.target.label);
+        }, false);
+
+        // Add the locations group to the map
+        map.addObject(group);
+        map.setCenter(group.getBounds().getCenter());
+      }
+
+      // Now use the map as required...
+
+      function run_maps(){
+
+        geocode(platform);
+      }
+
+</script>
+<style>
+  /* Style the header with a grey background and some padding */
+
+  .col-xs-15,
+  .col-sm-15,
+  .col-md-15,
+  .col-lg-15
+  {
+    position: relative;
+    min-height: 1px;
+  }
+  .col-xs-15
+  {
+    width: 50%;
+    float: left;
+  }
+
+  @media (min-width: 768px)
+  {
+    .col-sm-15
+    {
+      width: 50%;
+      float: left;
+    }
+  }
+  @media (min-width: 992px)
+  {
+    .col-md-15
+    {
+      width: 50%;
+      float: left;
+    }
+  }
+  @media (min-width: 1200px)
+  {
+    .col-lg-15
+    {
+      width: 50%;
+      float: left;
+    }
+  }
+
+  .header {
+    overflow: hidden;
+    background-color: #212529;
+    padding: 4px 4px;
+  }
+
+  /* Style the header links */
+  .header a {
+    float: left;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 4px;
+  }
+
+  /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
+  .header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  /* Change the background color on mouse-over */
+  .header a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  /* Style the active/current link*/
+  .header a.active {
+    background-color: dodgerblue;
+    color: white;
+  }
+
+  /* Float the link section to the right */
+  .header-right {
+    float: right;
+  }
+
+  /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
+  @media screen and (max-width: 500px) {
+    .header a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    .header-right {
+      float: none;
+    }
+  }
+</style>

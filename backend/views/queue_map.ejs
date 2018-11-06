@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <script src="/javascripts/qr_render/jquery.min.js"></script>
+    <script src="/javascripts/qr_render/jquery-qrcode-0.14.0.min.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css?dp-version=1533195059" />
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <meta charset="utf-8">
+
+  </head>
+
+
+  <body>
+    <div id="map" style="width: 500px; height: 500px; border-style: solid;">
+    </div
+  </body>
+</html>
+
+<script  type="text/javascript" charset="UTF-8" >
+
+      var platform = new H.service.Platform({
+        app_id: '8RDY8onWpgmSZ6TdR7xU',
+        app_code: 'UXYcuwksLXzVmASNjk7XAg',
+        useHTTPS: true
+      });
+      var pixelRatio = window.devicePixelRatio || 1;
+      var defaultLayers = platform.createDefaultLayers({
+        tileSize: pixelRatio === 1 ? 256 : 512,
+        ppi: pixelRatio === 1 ? undefined : 320
+      });
+
+      //Step 2: initialize a map - this map is centered over California
+      var map = new H.Map(document.getElementById('map'),
+          defaultLayers.normal.map,{
+          center: {lat:-70.38, lng:-33.27},
+          zoom: 15,
+          pixelRatio: pixelRatio
+      });
+
+      //var locationsContainer = document.getElementById('panel');
+
+      //Step 3: make the map interactive
+      // MapEvents enables the event system
+      // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+      var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+      // Create the default UI components
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+      // Hold a reference to any infobubble opened
+      var bubble;
+      /**
+      * Opens/Closes a infobubble
+      * @param  {H.geo.Point} position     The location on the map.
+      * @param  {String} text              The contents of the infobubble.
+      */
+      function openBubble(position, text){
+          if(!bubble){
+            bubble =  new H.ui.InfoBubble(
+              position,
+              {content: text});
+            ui.addBubble(bubble);
+          } else {
+            bubble.setPosition(position);
+            bubble.setContent(text);
+            bubble.open();
+          }
+      }
+
+      function addLocationsToMap(){
+
+        var group = new  H.map.Group(),
+          position,
+          i;
+
+        <% for(var i=0; i < queues.length; i++) {%>
+
+          position = {
+            lat: <%=queues[i].lat %>,
+            lng: <%=queues[i].long %>,
+          };
+          marker = new H.map.Marker(position);
+          marker.label = '<%=queues[i].name %>' + ' - <%=queues[i].description %>';
+          group.addObject(marker);
+
+        <% } %>
+
+        group.addEventListener('tap', function (evt) {
+          map.setCenter(evt.target.getPosition());
+          openBubble(
+             evt.target.getPosition(), evt.target.label);
+        }, false);
+
+        // Add the locations group to the map
+        map.addObject(group);
+        map.setCenter(group.getBounds().getCenter());
+      }
+
+      // Now use the map as required...
+      addLocationsToMap();
+
+
+</script>
+<style>
+  /* Style the header with a grey background and some padding */
+
+  .col-xs-15,
+  .col-sm-15,
+  .col-md-15,
+  .col-lg-15
+  {
+    position: relative;
+    min-height: 1px;
+  }
+  .col-xs-15
+  {
+    width: 50%;
+    float: left;
+  }
+
+  @media (min-width: 768px)
+  {
+    .col-sm-15
+    {
+      width: 50%;
+      float: left;
+    }
+  }
+  @media (min-width: 992px)
+  {
+    .col-md-15
+    {
+      width: 50%;
+      float: left;
+    }
+  }
+  @media (min-width: 1200px)
+  {
+    .col-lg-15
+    {
+      width: 50%;
+      float: left;
+    }
+  }
+
+  .header {
+    overflow: hidden;
+    background-color: #212529;
+    padding: 4px 4px;
+  }
+
+  /* Style the header links */
+  .header a {
+    float: left;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 4px;
+  }
+
+  /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
+  .header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  /* Change the background color on mouse-over */
+  .header a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  /* Style the active/current link*/
+  .header a.active {
+    background-color: dodgerblue;
+    color: white;
+  }
+
+  /* Float the link section to the right */
+  .header-right {
+    float: right;
+  }
+
+  /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
+  @media screen and (max-width: 500px) {
+    .header a {
+      float: none;
+      display: block;
+      text-align: left;
+    }
+    .header-right {
+      float: none;
+    }
+  }
+</style>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <meta charset="utf-8">
+    <title>Hola </title>
+  </head>
+
+  <div class="header">
+    <a href="#default" class="logo">SmartQueue</a>
+    <div class="header-right">
+      <a class="active" href="#home">Home</a>
+      <a href="">Crear queue</a>
+      <a href="#about">About</a>
+    </div>
+  </div>
+  <body>
+
+  <div class="container .text-justify">
+    <div class="row">
+      <h2 class=".text-justify">Queue</h2>
+    </div>
+  </div>
+
+    <div class="container">
+    <table class="table table-striped table-dark table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Id usuario</th>
+          <th scope="col">Hora de llegada</th>
+          <th scope="col">Tiempo promedio de espera</th>
+          <th scope="col">Número</th>
+          <th scope="col">Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i=0; i<queue.length; i++) {%>
+
+        <tr>
+          <td><%= queue[i].id_user %></td>
+          <td><%= queue[i].arrive.getHours()	%> : <%= queue[i].arrive.getMinutes()	%> : <%= queue[i].arrive.getSeconds()	%></td>
+          <td><%= queue[i].arrive	%></td>
+          <td><%= queue[i].number %></td>
+          <td>
+            <button type="button" class="btn btn-danger" name="button"><i class="fas fa-trash-alt"></i></button>
+          </td>
+        </tr>
+
+        <% } %>
+      </tbody>
+
+    </table>
+  </div>
+  </body>
+</html>
+<style>
+/* Style the header with a grey background and some padding */
+.col-xs-15,
+.col-sm-15,
+.col-md-15,
+.col-lg-15
+{
+  position: relative;
+  min-height: 1px;
+}
+.col-xs-15
+{
+  width: 20%;
+  float: left;
+}
+
+@media (min-width: 768px)
+{
+  .col-sm-15
+  {
+    width: 20%;
+    float: left;
+  }
+}
+@media (min-width: 992px)
+{
+  .col-md-15
+  {
+    width: 20%;
+    float: left;
+  }
+}
+@media (min-width: 1200px)
+{
+  .col-lg-15
+  {
+    width: 20%;
+    float: left;
+  }
+}
+
+.header {
+  overflow: hidden;
+  background-color: #212529;
+  padding: 20px 10px;
+}
+
+/* Style the header links */
+.header a {
+  float: left;
+  color: #fff;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+/* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
+.header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* Change the background color on mouse-over */
+.header a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Style the active/current link*/
+.header a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+/* Float the link section to the right */
+.header-right {
+  float: right;
+}
+
+/* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
+
+</style>
