@@ -79,7 +79,7 @@ exports.enqueue = function(req, res) {
             res.io.emit('ok', '$$$' + req.query.id);
             res.io.emit('ok', "qrc1" + req.query.id);
 
-            return res.status(200).send();
+            return res.status(200).send({'numero': body.number, 't_espera': 1000});
           });
           }
         });
