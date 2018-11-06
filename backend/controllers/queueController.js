@@ -69,7 +69,7 @@ exports.enqueue = function(req, res) {
             if(err) throw err;
 
             if(req.query.pencil == 1){
-              res.io.emit('qr' + req.query.id, '#pr' + 2);
+              res.io.emit('qr' + req.query.id, '#pr' + body.number);
               res.io.emit('qr' + req.query.id, 'id' + req.query.id);
 
             }else{
