@@ -239,8 +239,8 @@ class Card_queue extends Component {
             <div className="row mx-auto">
               <button type="button" onClick={this.handleScreen} className={this.state.btn_screen} name="button"><i className="fas fa-desktop"></i></button>
               <button type="button" onClick={this.handleQr} className={this.state.btn_qr} name="button"><i className="fas fa-qrcode"></i></button>
-              <button type="button" onClick={this.handleView} className="btn col-md-3 p-2 btn-info" name="button"><i className="far fa-eye"></i></button>
-              <button type="button" onClick={this.handleDelete} className="btn col-md-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
+              <button type="button" onClick={this.handleView} className="btn col-md-3 col-xs-3 p-2 btn-info" name="button"><i className="far fa-eye"></i></button>
+              <button type="button" onClick={this.handleDelete} className="btn col-md-3 col-xs-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
             </div>
           </div>
         </div>
