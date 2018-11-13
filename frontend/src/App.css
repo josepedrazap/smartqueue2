@@ -97,3 +97,16 @@
  50% {  box-shadow: 0 0 50px #fff;}
  100% {  box-shadow: 0 0 40px #088A08;}
 }
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin infinite 5s linear;
+}
+.text_footer{
+  font-size: 1.5em;
+  color: #aaa;
+  padding-left: 10px;
+  padding-right: 60px;
+}

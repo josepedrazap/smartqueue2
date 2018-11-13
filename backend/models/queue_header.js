@@ -8,11 +8,16 @@ var queue_headerSchema = new Schema(
     name: {type: String},
     status: {type: Boolean},
     date: {type: Date, default: Date.now},
-    alias_qr: {type: String},
     description: {type: String},
     lat: {type: Number},
     long: {type: Number},
-    address: {type: String}
+    address: {type: String},
+    number_now: {type: Number},
+    lambda: {type: Number},
+    cont: {type: Number},
+    cont_2: {type: Number},
+    time_avg: {type: Number},
+    time_exe_prev: {type: Date}
   }
 );
 //Export model

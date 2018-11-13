@@ -13,9 +13,12 @@ class Card_queue extends Component {
     this.state = {
       id: this.props.queue_id,
       c_nodes: "0",
+      lambda: 0,
       status: 0,
-      btn_screen: 'btn col-md-3 btn-outline-success',
-      btn_qr: 'btn col-md-3 p-2 btn-outline-warning',
+      number: 0,
+      time_avg: 0,
+      btn_screen: 'btn col-md-3 col-xs-3 btn-outline-success',
+      btn_qr: 'btn col-md-3 p-2  col-xs-3 btn-outline-warning',
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -24,7 +27,7 @@ class Card_queue extends Component {
     this.handleView = this.handleView.bind(this);
     this.handleDequeue = this.handleDequeue.bind(this);
     this.handleCount_nodes = this.handleCount_nodes.bind(this);
-
+    this.handleCall = this.handleCall.bind(this);
     this.handleCount_nodes();
   }
 
@@ -36,7 +39,7 @@ class Card_queue extends Component {
   };
 
   componentDidMount(){
-      var url = 'run/queue/count_nodes?id=' + this.state.id;
+      var url = 'run/queue/data_queue?id=' + this.state.id;
       signal_n_nodes(
         (err, aux1) => {
           //if(aux1[0] === '$' && aux1[1] === '$' && aux1[2] === '$'){
@@ -47,17 +50,18 @@ class Card_queue extends Component {
                 }
               })
                .then((response) => {
-                 console.log(response)
                 return response.json()
               })
               .then((data) => {
-                this.setState({ c_nodes: data })
+                console.log(data)
+
+                this.setState({ c_nodes: data[0], lambda: data[1], number: data[2], time_avg: data[3] })
               });
             }
           //}
         }
       );
-      qr_show_hide((err, aux) => {
+  qr_show_hide((err, aux) => {
         if(aux.substring(4) === this.state.id){
           if(aux[3] === '1'){
             this.setState({
@@ -70,7 +74,7 @@ class Card_queue extends Component {
           }
         }
       });
-      screen_show_hide((err, aux) => {
+  screen_show_hide((err, aux) => {
           if(aux.substring(4) === this.state.id){
             if(aux[3] === '1'){
               this.setState({
@@ -136,7 +140,7 @@ class Card_queue extends Component {
     window.open('/screen/run_qr?queue_id=' + this.state.id, '_blank');
   }
   handleScreen(){
-    window.open('/screen/run_screen?queue_id=' + this.state.id, '_blank');
+    window.open('/screen/run_screen?queue_id=' + this.state.id + '&num=' + this.state.number, '_blank');
   }
   handleView(){
     if(this.state.status === 0){
@@ -150,18 +154,27 @@ class Card_queue extends Component {
     }
   }
   handleCount_nodes(){
-    var url = 'run/queue/count_nodes?id=' + this.state.id;
+    var url = 'run/queue/data_queue?id=' + this.state.id;
     fetch(url, {
       headers: {
         authorization: 'beare '+ window.sessionStorage.getItem("token")
       }
     })
     .then((response) => {
-       console.log(response)
       return response.json()
     })
     .then((data) => {
-      this.setState({ c_nodes: data })
+      this.setState({ c_nodes: data[0], lambda: data[1], number: data[2], time_avg: data[3] })
+    });
+  }
+  handleCall(){
+    axios.get('/screen/call?id=' + this.state.id, {
+          headers: {
+          authorization: 'beare '+ window.sessionStorage.getItem("token")
+        }
+    })
+    .then({
+
     });
   }
   render(){
@@ -171,7 +184,7 @@ class Card_queue extends Component {
     if(this.state.status === 0){
       return(
         <Fragment>
-        <div className="col-md-3">
+        <div className="col-md-3 col-sm-6 col-xs-12">
           <div className="card mt-4 bg-light">
             <div className="card-header text-white bg-dark">
               {this.props.title}
@@ -180,8 +193,8 @@ class Card_queue extends Component {
               <div className="row mx-auto">
                 <button type="button" onClick={this.handleScreen} className={this.state.btn_screen} name="button"><i className="fas fa-desktop"></i></button>
                 <button type="button" onClick={this.handleQr} className={this.state.btn_qr} name="button"><i className="fas fa-qrcode"></i></button>
-                <button type="button" onClick={this.handleView} className="btn col-md-3 p-2 btn-outline-info" name="button"><i className="far fa-eye"></i></button>
-                <button type="button" onClick={this.handleDelete} className="btn col-md-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
+                <button type="button" onClick={this.handleView} className="btn col-sm-3 col-md-3 p-2 btn-outline-info" name="button"><i className="far fa-eye"></i></button>
+                <button type="button" onClick={this.handleDelete} className="btn col-sm-3 col-md-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
               </div>
             </div>
           </div>
@@ -197,13 +210,29 @@ class Card_queue extends Component {
           </div>
           <div className="card-body">
             <div className="list-group">
-              <p><i class="fas fa-map-pin"></i> {this.props.address}</p>
-              <p><i class="fas fa-users"></i> {this.state.c_nodes}</p>
-              <p><i class="far fa-file-alt"></i> {this.props.description}</p>
 
+              <div className="row">
+                <div className="col-md-6"><p><i class="fas fa-users"></i> {this.state.c_nodes} </p></div>
+                <div className="col-md-6"><p><i class="fas fa-list-ol"></i> {this.state.number} </p></div>
+              </div>
+              <div className="row">
+                <div className="col-md-6"><p><i class="far fa-clock"></i> {this.state.lambda}</p> </div>
+                <div className="col-md-6"><p><i class="fas fa-stopwatch"></i> {this.state.time_avg}</p> </div>
+              </div>
+              <div className="row">
+                <div className="col-md-12">
+                  <p><i class="fas fa-map-pin"></i> {this.props.address}</p>
+                  <p><i class="far fa-file-alt"></i> {this.props.description}</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <button type="button" onClick={this.handleDequeue} className="btn btn-success col-md-12">Dequeue</button>
+            <div className="row">
+              <div className="col-md-8">
+                <button type="button" onClick={this.handleDequeue} className="btn btn-success">Dequeue <i class="fas fa-volume-up"></i></button>
+              </div>
+              <div className="col-md-4">
+                <button type="button" onClick={this.handleCall} className="btn btn-warning"><i class="fas fa-volume-up"></i></button>
+              </div>
             </div>
           </div>
           <div className="card-footer bg-dark">

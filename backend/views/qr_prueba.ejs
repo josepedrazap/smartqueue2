@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
+      <head>
+          <meta charset="utf-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>QR</title>
 
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>QR</title>
-
-        <!-- CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-    </head>
-
-    <body>
-          <div class="row box_1">
-              <div class="col-md-12">
+          <!-- CSS -->
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+          <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+      </head>
+      <body>
+            <div class="row box_1">
                 <div class="col-md-12">
-                  <h3 class="text_principal font-weight-light" id="texto_1">
-                    Escanea el código con tu aplicación SmartQueue o tócalo para imprimir tu ticket ;)
-                  </h3>
+                  <div class="col-md-12">
+                    <h3 class="text_principal font-weight-light" id="texto_1">
+                      Escanea el código con tu aplicación SmartQueue o toca el código ;)
+                    </h3>
+                  </div>
+
                 </div>
+                <div class="box_2" id="qr" onclick="pencil()">
 
-              </div>
-              <div class="box_2" id="qr" onclick="pencil()">
-
-              </div>
-          </div>
-          <audio hidden class="hidden" id="audio" controls>
-            <source type="audio/wav" src="/audio/ding.wav">
-          </audio>
-    </body>
-    <footer class="footer">
-      <img class="image_footer spin" src="/images/share32.png" />
-      <a class="text_footer font-weight-light">
-        SmartQueue
-      </a>
-    </footer>
+                </div>
+            </div>
+            <audio hidden class="hidden" id="audio" controls>
+              <source type="audio/wav" src="/audio/yes.mp3">
+            </audio>
+      </body>
+      <footer class="footer">
+        <img class="image_footer spin" src="/images/share32.png" />
+        <a class="text_footer font-weight-light">
+          SmartQueue
+        </a>
+      </footer>
 
         <!-- Javascript -->
         <script src="/javascripts/socket.io/socket.io.js"></script>
@@ -57,7 +55,7 @@
             }))
           }
           function pencil(){
-            var id = '<%=q[0]._id%>';
+            var id = '';
             axios({
               url: '/run/queue/enqueue?id=' + id + '&pencil=1',
               method: 'get'
@@ -94,7 +92,7 @@
                 background: null,
 
                 // content
-                text: '<%=q[0]._id%>',
+                text: 'hola',
 
                 // corner radius relative to module width: 0.0 .. 0.5
                 radius: 0.0,
@@ -114,7 +112,7 @@
                 mPosX: 0.5,
                 mPosY: 0.5,
 
-                label: '<%=q[0].alias_qr%>',
+                label: 'hola',
                 fontname: 'Sans-serif',
                 fontcolor: '#fff',
 
@@ -124,7 +122,7 @@
 
           $(function (){
             socket = io();
-            socket.on('qr<%=q[0]._id%>', function(msg){
+            socket.on('qr', function(msg){
               if(msg === 'cancel'){
                 document.getElementById("qr").innerHTML="";
                 document.getElementById("texto_1").innerHTML="La queue ha sido cancelada por su administrador :(";
@@ -136,12 +134,9 @@
                 print_(msg.substring(3));
               }
               if(msg[0] == 'i' && msg[1] == 'd'){
-                var audio = document.getElementById("audio");
-
-                $("#qr").fadeOut();
-
                 document.getElementById("qr").innerHTML="";
-
+                var audio = document.getElementById("audio");
+                audio.play();
                 $('#qr').qrcode({
                       // render method: 'canvas', 'image' or 'div'
                       render: 'canvas',
@@ -158,7 +153,7 @@
                       top: 0,
 
                       // size in pixel
-                      size: 300,
+                      size: 500,
 
                       // code color or image element
                       fill: '#fff',
@@ -187,16 +182,13 @@
                       mPosX: 0.5,
                       mPosY: 0.5,
 
-                      label:  '<%=q[0]._id%>',
+                      label:  'hola',
                       fontname: 'Sans-serif',
                       fontcolor: '#fff',
 
                       image: null
                   });
               }
-              $("#qr").fadeIn();
-              audio.play();
-
 
             });
           });

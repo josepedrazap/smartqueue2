@@ -26,9 +26,10 @@ class Navigation extends Component {
     return (
       <div>
         <Navbar color="dark" light expand="md">
-          <a className="text-white ">
-            SmartQueue - Bienvenido
-          </a>
+        <img className="image_footer spin" src={logo} />
+        <a className="text_footer font-weight-light text-white">
+          SmartQueue
+        </a>
 
             <Nav className="ml-auto" navbar>
               <Link to="/home">
