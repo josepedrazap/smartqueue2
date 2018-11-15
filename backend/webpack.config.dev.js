@@ -1,5 +1,8 @@
 import webpack from 'webpack'
 import path from 'path'
+
+//var webpack = require('webpack');
+//var path = require('path');
 const PATHS = {
   index: path.join(__dirname, '../frontend/src/index'),
   build: path.join(__dirname, '../frontend/dist'),
@@ -23,8 +26,9 @@ export default {
 
   module: {
     rules: [{
-      test: /\.js?$/,
+      test: /\.jsx?$/,
       loader: 'babel-loader',
+      exclude: /(node_modules)/,
       include: PATHS.base,
       query: {
         plugins: ['transform-runtime'],

@@ -4,6 +4,12 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import open from 'open'
 import webpackConfig from './webpack.config.dev'
 
+//var webpackHotMiddleware = require('webpack-dev-middleware');
+//var webpackDevMiddleware = require('webpack-hot-middleware');
+//var open = require('open');
+//var webpackConfig = require('./webpack.config.dev');
+
+//var webpack = require('webpack');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');

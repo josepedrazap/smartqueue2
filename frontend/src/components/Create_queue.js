@@ -106,7 +106,7 @@ class Create_queue extends Component {
       return(<Redirect to="/home" />);
     }else{
       return(
-      <div className="col-md-8 col-sm-10 col-xs-12 Cq">
+      <div className="col-md-8 col-sm-10 col-12 Cq">
         <div className="card">
         <div className="card-header text-white bg-dark">
           <div className="row">
@@ -119,7 +119,7 @@ class Create_queue extends Component {
           </div>
         </div>
           <div className="row">
-                <div className="col-md-6">
+                <div className="col-md-6 col-lg-6 col-12">
                   <form className="card-body" >
 
                     <label>Nombre: </label>
@@ -142,7 +142,7 @@ class Create_queue extends Component {
                   </form>
                 </div>
 
-            <div className="col-md-6 map-cq border-solid">
+            <div className="col-md-6 col-12 map-cq border-solid">
               <SimpleExample
                 title={this.state.title}
                 lat={this.state.lat}
@@ -153,8 +153,8 @@ class Create_queue extends Component {
 
           <div className="card-footer bg-dark ">
             <div className="row Cq_buttons">
-                <button type="submit" onClick={this.handleSubmit} className="btn col-md-3 btn-outline-success mr-1" name="button">Aceptar</button>
-                <button type="button" onClick={this.handleClose} className="btn col-md-3 btn-outline-warning" name="button">Cancelar</button>
+                <button type="submit" onClick={this.handleSubmit} className="btn col-md-3 col-sm-6 col-6 btn-outline-success mr-1" name="button">Aceptar</button>
+                <button type="button" onClick={this.handleClose} className="btn col-md-3 col-sm-6   col-6 btn-outline-warning" name="button">Cancelar</button>
             </div>
           </div>
 

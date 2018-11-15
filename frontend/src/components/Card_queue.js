@@ -17,8 +17,8 @@ class Card_queue extends Component {
       status: 0,
       number: 0,
       time_avg: 0,
-      btn_screen: 'btn col-md-3 col-xs-3 btn-outline-success',
-      btn_qr: 'btn col-md-3 p-2 col-xs-3 btn-outline-warning',
+      btn_screen: 'btn col-3 col-md-3 col-lg-3 btn-outline-success',
+      btn_qr: 'btn col-3 col-md-3 p-2 col-lg-3 btn-outline-warning',
     };
 
     this.handleDelete = this.handleDelete.bind(this);
@@ -65,11 +65,11 @@ class Card_queue extends Component {
         if(aux.substring(4) === this.state.id){
           if(aux[3] === '1'){
             this.setState({
-              btn_qr: 'btn col-md-3 col-xs-3 p-2 btn-warning'
+              btn_qr: 'btn col-md-3 col-lg-3 p-2 btn-warning'
             })
           }else{
             this.setState({
-              btn_qr: 'btn col-md-3 col-xs-3 p-2 btn-outline-warning'
+              btn_qr: 'btn col-md-3 col-lg-3 p-2 btn-outline-warning'
             })
           }
         }
@@ -78,11 +78,11 @@ class Card_queue extends Component {
           if(aux.substring(4) === this.state.id){
             if(aux[3] === '1'){
               this.setState({
-                btn_screen: 'btn col-md-3 col-xs-3 p-2 btn-success'
+                btn_screen: 'btn col-md-3 col-lg-3 p-2 btn-success'
               })
             }else{
               this.setState({
-                btn_screen: 'btn col-md-3 col-xs-3 p-2 btn-outline-success'
+                btn_screen: 'btn col-md-3 col-lg-3 p-2 btn-outline-success'
               })
             }
           }
@@ -184,7 +184,7 @@ class Card_queue extends Component {
     if(this.state.status === 0){
       return(
         <Fragment>
-        <div className="col-md-3 col-sm-6 col-xs-12">
+        <div className="col-md-4 col-lg-3 col-sm-6 col-12">
           <div className="card mt-4 bg-light">
             <div className="card-header text-white bg-dark">
               {this.props.title}
@@ -193,8 +193,8 @@ class Card_queue extends Component {
               <div className="row mx-auto">
                 <button type="button" onClick={this.handleScreen} className={this.state.btn_screen} name="button"><i className="fas fa-desktop"></i></button>
                 <button type="button" onClick={this.handleQr} className={this.state.btn_qr} name="button"><i className="fas fa-qrcode"></i></button>
-                <button type="button" onClick={this.handleView} className="btn col-xs-3 col-md-3 p-2 btn-outline-info" name="button"><i className="far fa-eye"></i></button>
-                <button type="button" onClick={this.handleDelete} className="btn col-xs-3 col-md-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
+                <button type="button" onClick={this.handleView} className="btn col-3 col-lg-3 col-md-3 p-2 btn-outline-info" name="button"><i className="far fa-eye"></i></button>
+                <button type="button" onClick={this.handleDelete} className="btn col-3 col-lg-3 col-md-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
               </div>
             </div>
           </div>
@@ -203,7 +203,7 @@ class Card_queue extends Component {
       )
     }
     return (
-      <div className="col-md-3">
+      <div className="col-md-4 col-lg-3 col-sm-6 col-12">
         <div className="card mt-4 bg-light">
           <div className="card-header text-white bg-dark">
             {this.props.title}
@@ -239,8 +239,8 @@ class Card_queue extends Component {
             <div className="row mx-auto">
               <button type="button" onClick={this.handleScreen} className={this.state.btn_screen} name="button"><i className="fas fa-desktop"></i></button>
               <button type="button" onClick={this.handleQr} className={this.state.btn_qr} name="button"><i className="fas fa-qrcode"></i></button>
-              <button type="button" onClick={this.handleView} className="btn col-md-3 col-xs-3 p-2 btn-info" name="button"><i className="far fa-eye"></i></button>
-              <button type="button" onClick={this.handleDelete} className="btn col-md-3 col-xs-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
+              <button type="button" onClick={this.handleView} className="btn col-3 col-md-3 col-lg-3 p-2 btn-info" name="button"><i className="far fa-eye"></i></button>
+              <button type="button" onClick={this.handleDelete} className="btn col-3 col-md-3 col-lg-3 p-2 btn-outline-danger" name="button"><i className="fas fa-trash-alt"></i></button>
             </div>
           </div>
         </div>
