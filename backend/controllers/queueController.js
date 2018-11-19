@@ -36,15 +36,20 @@ exports.data_queue = function(req, res) {
   queue_header.findOne({_id: req.query.id})
   .exec(function(err, queue_){
 
-    var lambda = s_to_hms(queue_.lambda)
-    var time_avg = s_to_hms(queue_.time_avg)
+    if(queue_){
+      var lambda = s_to_hms(queue_.lambda)
+      var time_avg = s_to_hms(queue_.time_avg)
 
-    data[0] = ' ' + queue_.cont;
-    data[1] = ' ' + lambda;
-    data[2] = ' ' + queue_.number_now;
-    data[3] = ' ' + time_avg;
+      data[0] = ' ' + queue_.cont;
+      data[1] = ' ' + lambda;
+      data[2] = ' ' + queue_.number_now;
+      data[3] = ' ' + time_avg;
 
-    return res.status(200).send(data);
+      return res.status(200).send(data);
+    }else{
+      return res.status(200).send("NO");
+
+    }
   });
 };
 
@@ -131,7 +136,7 @@ exports.enqueue = function(req, res) {
           }
         });
     }else{
-        return res.status(404).send("no existe la cola");
+        return res.status(200).send("NO");
     }
   });
 

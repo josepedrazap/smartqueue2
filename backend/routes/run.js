@@ -12,13 +12,13 @@ router.get('/queue_header/list', auth, queue_controller.queue_list);
 
 router.get('/queue/count_nodes', auth, queue_controller.count_nodes);
 
-router.get('/queue/data_queue', auth, queue_controller.data_queue);
+router.get('/queue/data_queue', queue_controller.data_queue);
 
 router.get('/queue/user_list/:id_queue/', auth, queue_controller.user_list);
 
 router.get('/queue/enqueue', queue_controller.enqueue);
 
-router.get('/queue/dequeue', queue_controller.dequeue);
+router.get('/queue/dequeue', auth, queue_controller.dequeue);
 
 router.post('/queue/create_queue',auth, queue_controller.create_queue);
 
