@@ -124,7 +124,7 @@ exports.enqueue = function(req, res) {
                 return res.status(200).send({
                                               'numero': body.number,
                                               'nombre_queue': queue_.name,
-                                              'tiempo_estimado': s_to_hms((Date.now() + queue_.time_avg)/1000),
+                                              'tiempo_estimado': Date.now().add(queue_.time_avg, 's'),
                                               'lat': queue_.lat,
                                               'long': queue_.long,
                                               'direccion': queue_.address,
