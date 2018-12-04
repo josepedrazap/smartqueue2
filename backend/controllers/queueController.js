@@ -3,6 +3,8 @@ var queue_header  = require('../models/queue_header');
 var async = require('async');
 const url = require('url');
 var io = require('socket.io');
+var moment = require('moment');
+moment().format();
 
 function s_to_hms(s){
   var hours = Math.floor( s / 3600 );
@@ -120,11 +122,11 @@ exports.enqueue = function(req, res) {
                 res.io.emit('ok', "qrc1" + req.query.id);
 
                 console.log(queue_);
-                var t = Date.now()
+
                 return res.status(200).send({
                                               'numero': body.number,
                                               'nombre_queue': queue_.name,
-                                              'tiempo_estimado': t.add(queue_.time_avg, 's'),
+                                              'tiempo_estimado': moment().add(queue_.time_avg, 's'),
                                               'lat': queue_.lat,
                                               'long': queue_.long,
                                               'direccion': queue_.address,
