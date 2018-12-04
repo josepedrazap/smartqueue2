@@ -14,8 +14,8 @@ var queue_headerSchema = new Schema(
     address: {type: String},
     number_now: {type: Number},
     lambda: {type: Number},
-    cont: {type: Number},
-    cont_2: {type: Number},
+    cont: {type: Number}, //Los que actualmente estan
+    cont_2: {type: Number}, //todos los que han estado en la fila
     time_avg: {type: Number},
     time_exe_prev: {type: Date}
   }

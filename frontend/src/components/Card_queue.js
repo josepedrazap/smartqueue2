@@ -208,7 +208,7 @@ class Card_queue extends Component {
           <div className="card-header text-white bg-dark">
             {this.props.title}
           </div>
-          <div className="card-body">
+          <div className="card-body ">
             <div className="list-group">
 
               <div className="row">
