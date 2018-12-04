@@ -126,7 +126,7 @@ exports.enqueue = function(req, res) {
                 return res.status(200).send({
                                               'numero': body.number,
                                               'nombre_queue': queue_.name,
-                                              'tiempo_estimado': moment().add(queue_.time_avg, 's'),
+                                              'tiempo_estimado': moment().add(queue_.time_avg, 's').format('HH:mm:ss'),
                                               'lat': queue_.lat,
                                               'long': queue_.long,
                                               'direccion': queue_.address,
