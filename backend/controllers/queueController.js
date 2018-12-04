@@ -120,11 +120,11 @@ exports.enqueue = function(req, res) {
                 res.io.emit('ok', "qrc1" + req.query.id);
 
                 console.log(queue_);
-
+                var t = Date.now()
                 return res.status(200).send({
                                               'numero': body.number,
                                               'nombre_queue': queue_.name,
-                                              'tiempo_estimado': Date.now().add(queue_.time_avg, 's'),
+                                              'tiempo_estimado': t.add(queue_.time_avg, 's'),
                                               'lat': queue_.lat,
                                               'long': queue_.long,
                                               'direccion': queue_.address,
